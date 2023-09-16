@@ -1,1 +1,61 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
+.search-form {
+display: flex;
+justify-content: center;
+padding: 20px 20px;
+}
+
+.search-form input {
+width: 300px;
+font-size: 13px;
+padding: 6px 0 4px 10px;
+border: 1px solid #cecece;
+background: #F6F6f6;
+border-radius: 10px;
+
+}
+
+button[type="submit"] {
+    background-color: #db5102;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    
+
+}
+
+button[type="submit"]:hover {
+    background-color: #ef9725;
+}
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+img {
+    display: block;
+    max-width: 320px;
+}
+
+.load-more {
+height: 30px;
+background-color: #db5102;
+color: #ffffff;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+}
+
+.load-more:hover {
+background-color: #db5102;
+ color: #ffffff;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 10px;
+ cursor: pointer;  
+}
