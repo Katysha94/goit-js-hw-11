@@ -69,7 +69,8 @@ function renderImageList(images) {
     .map((image) => {
       return `
         <div class="photo-card">
-          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy"/>
+        <a href="${image.largeImageURL}">
+          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy"/></a>
           <div class="stats">
             <p class="stats-item">
               Likes: ${image.likes}
