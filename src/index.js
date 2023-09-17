@@ -1,7 +1,8 @@
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImg } from './api-service'
+import { fetchImg } from './api-service';
+import { renderImageList } from './createMarkup';
 
 const inputEl = document.querySelector('#search-form input');
 const searchButton = document.querySelector('button[type="submit"]');
@@ -26,7 +27,9 @@ searchButton.addEventListener('click', async (evt) => {
           'Sorry, there are no images matching your search query. Please try again.'
         );
       } else {
-        renderImageList(foundData.hits);
+        const markup = renderImageList(foundData.hits);
+        gallery.innerHTML = markup;
+
         Notiflix.Notify.success(
           `Hooray! We found ${foundData.totalHits} images.`
         );
@@ -39,60 +42,33 @@ searchButton.addEventListener('click', async (evt) => {
     }
   }
 });
-  
+
 loadMoreBtn.addEventListener('click', async () => {
     pageNumber++;
     const searchValue = inputEl.value.trim();
     loadMoreBtn.style.display = 'none';
 
     try {
-        const foundData = await fetchImg(searchValue, pageNumber);
-        console.log(foundData);
-        if (foundData.hits.length === 0) {
-            Notiflix.Notify.failure(
-                'Sorry, there are no images matching your search query. Please try again.'
-            );
-        } else {
-            renderImageList(foundData.hits);
-            Notiflix.Notify.success(`Hooray! We found ${foundData.totalHits} images.`);
-      
-            loadMoreBtn.style.display = 'block';
-        }
+      const foundData = await fetchImg(searchValue, pageNumber);
+      console.log(foundData);
+    const markup = renderImageList(foundData.hits);
+      gallery.insertAdjacentHTML('beforeend', markup);
+      gallerySimpleLightbox.refresh();
+       if (gallery.querySelectorAll('.gallery__item').length >= foundData.totalHits) {
+      loadMoreBtn.style.display = 'none';
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    } else {
+      loadMoreBtn.style.display = 'block';
+    }
     } catch (error) {
         console.error(error);
         Notiflix.Notify.failure('Ooops...Something went wrong!');
     }
 });
 
-function renderImageList(images) {
-  const markup = images
-    .map((image) => {
-      return `
-        <div class="photo-card">
-        <a href="${image.largeImageURL}">
-          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy"/></a>
-          <div class="stats">
-            <p class="stats-item">
-              Likes: ${image.likes}
-            </p>
-            <p class="stats-item">
-              Views: ${image.views}
-            </p>
-            <p class="stats-item">
-              Comments: ${image.comments}
-            </p>
-            <p class="stats-item">
-              Downloads: ${image.downloads}
-            </p>
-          </div>
-        </div>
-      `;
-    })
-    .join('');
-  gallery.insertAdjacentHTML('beforeend', markup);
-}
 
 function cleanGallery() {
+  gallerySimpleLightbox.close();
   gallery.innerHTML = '';
   pageNumber = 1;
   loadMoreBtn.style.display = 'none';
