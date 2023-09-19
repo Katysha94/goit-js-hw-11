@@ -4,7 +4,7 @@ export function renderImageList(images) {
       return `
         <div class="photo-card">
         <a href="${image.largeImageURL}">
-          <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy"/></a>
+          <img src="${image.webformatURL}" alt="${image.tags} loading="lazy" width="350" height="214"/></a>
           <div class="stats">
             <p class="stats-item">
               Likes: ${image.likes}

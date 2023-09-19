@@ -17,6 +17,7 @@ let pageNumber = 1;
 searchButton.addEventListener('click', async (evt) => {
   evt.preventDefault();
   cleanGallery();
+  loadMoreBtn.style.display = 'none';
   const searchValue = inputEl.value.trim();
   if (searchValue !== '') {
     try {
@@ -30,6 +31,9 @@ searchButton.addEventListener('click', async (evt) => {
         const markup = renderImageList(foundData.hits);
         gallery.innerHTML = markup;
 
+         if (foundData.totalHits > 40) {
+          loadMoreBtn.style.display = 'block';
+        }
         Notiflix.Notify.success(
           `Hooray! We found ${foundData.totalHits} images.`
         );
@@ -43,28 +47,42 @@ searchButton.addEventListener('click', async (evt) => {
   }
 });
 
-loadMoreBtn.addEventListener('click', async () => {
-    pageNumber++;
-    const searchValue = inputEl.value.trim();
-    loadMoreBtn.style.display = 'none';
+loadMoreBtn.addEventListener('click', loadMore);
 
-    try {
-      const foundData = await fetchImg(searchValue, pageNumber);
-      console.log(foundData);
-    const markup = renderImageList(foundData.hits);
-      gallery.insertAdjacentHTML('beforeend', markup);
-      gallerySimpleLightbox.refresh();
-       if (gallery.querySelectorAll('.gallery__item').length >= foundData.totalHits) {
-      loadMoreBtn.style.display = 'none';
-      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-    } else {
-      loadMoreBtn.style.display = 'block';
-    }
-    } catch (error) {
-        console.error(error);
-        Notiflix.Notify.failure('Ooops...Something went wrong!');
-    }
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 10) {
+    loadMore();
+  }
 });
+async function loadMore() {
+  pageNumber++;
+  const searchValue = inputEl.value.trim();
+  try {
+    const foundData = await fetchImg(searchValue, pageNumber);
+    let allPages = Math.ceil(foundData.totalHits / 40);
+    console.log(foundData);
+    const markup = renderImageList(foundData.hits);
+    gallery.insertAdjacentHTML('beforeend', markup);
+    gallerySimpleLightbox.refresh();
+    if (allPages < pageNumber + 1) {
+      Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+      loadMoreBtn.style.display = 'none';
+    }
+    const { height: cardHeight } = document
+      .querySelector('.gallery')
+      .firstElementChild.getBoundingClientRect();
+
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+  } catch (error) {
+    console.error(error);
+    Notiflix.Notify.failure('Ooops...Something went wrong!');
+  }
+}
+
 
 
 function cleanGallery() {
