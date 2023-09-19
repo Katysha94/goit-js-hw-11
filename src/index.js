@@ -52,6 +52,8 @@ loadMoreBtn.addEventListener('click', loadMore);
 window.addEventListener('scroll', () => {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
   if (scrollTop + clientHeight >= scrollHeight - 10) {
+    const searchValue = inputEl.value.trim();
+    if (searchValue !== '' && loadMoreBtn.style.display !== 'none')
     loadMore();
   }
 });
