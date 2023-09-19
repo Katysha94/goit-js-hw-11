@@ -1,17 +1,17 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
 .search-form {
-display: flex;
-justify-content: center;
-padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    padding: 20px 20px;
 }
 
 .search-form input {
-width: 300px;
-font-size: 13px;
-padding: 6px 0 4px 10px;
-border: 1px solid #cecece;
-background: #F6F6f6;
-border-radius: 10px;
+    width: 300px;
+    font-size: 13px;
+    padding: 6px 0 4px 10px;
+    border: 1px solid #cecece;
+    background: #F6F6f6;
+    border-radius: 10px;
 
 }
 
@@ -22,7 +22,7 @@ button[type="submit"] {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    
+
 
 }
 
@@ -39,19 +39,27 @@ button[type="submit"]:hover {
 
 img {
     display: block;
-    width: 320px;
+    object-fit: cover;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+img:hover {
+    transform: scale(1.05);
+    border-radius: 3px;
 }
 
 .load-more {
-height: 30px;
-background-color: #db5102;
-color: #ffffff;
-border: none;
-border-radius: 10px;
-cursor: pointer;
-margin: 0 auto;
+    height: 30px;
+    background-color: #db5102;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 0 auto;
 }
 
 .load-more:hover {
-background-color: #ef9725;
+    background-color: #ef9725;
 }
